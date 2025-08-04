@@ -19,26 +19,23 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
         e.stopPropagation();
 
         if (value) {
-            // Show reading input if 'Yes' selected
             setShowReadingInput(true);
         } else {
-            // If 'No' selected, update immediately without reading input
             try {
                 await axios.patch(`/reading-ds/${record.id}/decimal`, {
                     meter_has_decimal: false,
                 });
-                alert(`Marked as not decimal.`);
-                if (onUpdate) onUpdate();
+                if (onUpdate) onUpdate(); // Refresh the card list
             } catch (error) {
                 console.error("Update failed", error);
-                alert("Error updating decimal status.");
+                // Optional: show error UI or snackbar instead of alert
             }
         }
     };
 
     const submitReading = async () => {
         if (!readingValue) {
-            alert("Please enter a reading.");
+            // Optional: Show a toast/snackbar instead of alert
             return;
         }
 
@@ -47,13 +44,52 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
                 meter_has_decimal: true,
                 prev_reading: readingValue,
             });
-            alert("Reading submitted and marked as decimal.");
-            if (onUpdate) onUpdate();
+            if (onUpdate) onUpdate(); // Refresh after successful update
         } catch (error) {
             console.error("Update failed", error);
-            alert("Error submitting reading.");
+            // Optional: show error UI or snackbar instead of alert
         }
     };
+
+    // const handleDecimalUpdate = async (value, e) => {
+    //     e.stopPropagation();
+
+    //     if (value) {
+    //         // Show reading input if 'Yes' selected
+    //         setShowReadingInput(true);
+    //     } else {
+    //         // If 'No' selected, update immediately without reading input
+    //         try {
+    //             await axios.patch(`/reading-ds/${record.id}/decimal`, {
+    //                 meter_has_decimal: false,
+    //             });
+    //             alert(`Marked as not decimal.`);
+    //             if (onUpdate) onUpdate();
+    //         } catch (error) {
+    //             console.error("Update failed", error);
+    //             alert("Error updating decimal status.");
+    //         }
+    //     }
+    // };
+
+    // const submitReading = async () => {
+    //     if (!readingValue) {
+    //         alert("Please enter a reading.");
+    //         return;
+    //     }
+
+    //     try {
+    //         await axios.patch(`/reading-ds/${record.id}/decimal`, {
+    //             meter_has_decimal: true,
+    //             prev_reading: readingValue,
+    //         });
+    //         alert("Reading submitted and marked as decimal.");
+    //         if (onUpdate) onUpdate();
+    //     } catch (error) {
+    //         console.error("Update failed", error);
+    //         alert("Error submitting reading.");
+    //     }
+    // };
 
     return (
         <Card
@@ -86,7 +122,12 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
                         Is this a decimal image?
                     </Typography>
 
-                    <Stack direction="row" alignItems="center" spacing={2} mt={1}>
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={2}
+                        mt={1}
+                    >
                         <Button
                             variant="contained"
                             color="success"
@@ -113,7 +154,9 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
                                 variant="outlined"
                                 size="small"
                                 value={readingValue}
-                                onChange={(e) => setReadingValue(e.target.value)}
+                                onChange={(e) =>
+                                    setReadingValue(e.target.value)
+                                }
                             />
                             <Button variant="contained" onClick={submitReading}>
                                 Submit Reading
@@ -127,10 +170,6 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
 };
 
 export default MeterCard;
-
-
-
-
 
 // import React from "react";
 // import {
@@ -219,6 +258,3 @@ export default MeterCard;
 // };
 
 // export default MeterCard;
-
-
-
