@@ -10,12 +10,16 @@ const Dashboard = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
+    const handleCardUpdate = (id) => {
+        setRecords((prev) => prev.filter((rec) => rec.id !== id));
+    };
+
     const fetchData = async (currentPage) => {
         try {
             const res = await axios.get(
                 `/reading-ds?page=${currentPage}&per_page=12`
             );
-            setRecords(res.data.data); // <-- backend returns objects now
+            setRecords(res.data.data);
             setTotalPages(res.data.pages);
         } catch (err) {
             console.error(err);
@@ -44,28 +48,26 @@ const Dashboard = () => {
                     letterSpacing: 0.5,
                 }}
             >
-                ReadingDS Image Records
+                Powerhouse Image Records
             </Typography>
-            <br />
 
             <Grid container spacing={2}>
                 {records.map((record) => (
                     <Grid item xs={12} sm={6} md={4} key={record.id}>
                         {/* <MeterCard
-                            record={record} 
+                            record={record}
                             onClick={() => setSelected(record)}
+                            onUpdate={() => fetchData(page)}
                         /> */}
-
                         <MeterCard
                             record={record}
                             onClick={() => setSelected(record)}
-                            onUpdate={() => fetchData(page)} 
+                            onUpdate={handleCardUpdate}
                         />
                     </Grid>
                 ))}
             </Grid>
 
-            {/* Pagination */}
             <Box mt={4} display="flex" justifyContent="center">
                 <Pagination
                     count={totalPages}
@@ -81,7 +83,7 @@ const Dashboard = () => {
                     onClose={() => setSelected(null)}
                     onSubmitSuccess={() => {
                         setSelected(null);
-                        fetchData(page);
+                        fetchData(page); // Refresh data after update
                     }}
                 />
             )}
@@ -103,18 +105,21 @@ export default Dashboard;
 //     const [page, setPage] = useState(1);
 //     const [totalPages, setTotalPages] = useState(1);
 
-//     const fetchImages = async () => {
+//     const fetchData = async (currentPage) => {
 //         try {
-//             const res = await axios.get("/s3-images");
-//             setRecords(res.data.images);
+//             const res = await axios.get(
+//                 `/reading-ds?page=${currentPage}&per_page=12`
+//             );
+//             setRecords(res.data.data); // <-- backend returns objects now
+//             setTotalPages(res.data.pages);
 //         } catch (err) {
 //             console.error(err);
 //         }
 //     };
 
 //     useEffect(() => {
-//         fetchImages();
-//     }, []);
+//         fetchData(page);
+//     }, [page]);
 
 //     const handlePageChange = (event, value) => {
 //         setPage(value);
@@ -134,19 +139,31 @@ export default Dashboard;
 //                     letterSpacing: 0.5,
 //                 }}
 //             >
-//                 S3 Image Records
+//                 ReadingDS Image Records
 //             </Typography>
 //             <br />
+
 //             <Grid container spacing={2}>
-//                 {records.map((url, index) => (
-//                     <Grid item xs={12} sm={6} md={4} key={index}>
+//                 {records.map((record) => (
+//                     <Grid item xs={12} sm={6} md={4} key={record.id}>
 //                         <MeterCard
-//                             record={{ image_url: url }} // structure expected by MeterCard
-//                             onClick={() => setSelected({ image_url: url })}
+//                             record={record}
+//                             onClick={() => setSelected(record)}
+//                             onUpdate={() => fetchData(page)}
 //                         />
 //                     </Grid>
 //                 ))}
 //             </Grid>
+
+//             {/* Pagination */}
+//             <Box mt={4} display="flex" justifyContent="center">
+//                 <Pagination
+//                     count={totalPages}
+//                     page={page}
+//                     onChange={handlePageChange}
+//                     color="primary"
+//                 />
+//             </Box>
 
 //             {selected && (
 //                 <MeterModal
@@ -154,7 +171,7 @@ export default Dashboard;
 //                     onClose={() => setSelected(null)}
 //                     onSubmitSuccess={() => {
 //                         setSelected(null);
-//                         fetchImages();
+//                         fetchData(page);
 //                     }}
 //                 />
 //             )}
