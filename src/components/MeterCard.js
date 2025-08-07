@@ -15,20 +15,33 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
     const [showReadingInput, setShowReadingInput] = useState(false);
     const [readingValue, setReadingValue] = useState("");
 
+// const handleDecimalUpdate = async (value, e) => {
+//     e.stopPropagation();
+
+//     if (value) {
+//         setShowReadingInput(true);
+//     } else {
+//         try {
+//             await axios.patch(`/reading-ds/${record.id}/decimal`, {
+//                 meter_has_decimal: false,
+//             });
+//             if (onUpdate) onUpdate(record.id); // Pass ID to parent
+//         } catch (error) {
+//             console.error("Update failed", error);
+//         }
+//     }
+// };
+
 const handleDecimalUpdate = async (value, e) => {
     e.stopPropagation();
 
-    if (value) {
-        setShowReadingInput(true);
-    } else {
-        try {
-            await axios.patch(`/reading-ds/${record.id}/decimal`, {
-                meter_has_decimal: false,
-            });
-            if (onUpdate) onUpdate(record.id); // Pass ID to parent
-        } catch (error) {
-            console.error("Update failed", error);
-        }
+    try {
+        await axios.patch(`/reading-ds/${record.id}/decimal`, {
+            meter_has_decimal: value,
+        });
+        if (onUpdate) onUpdate(record.id); // Notify parent
+    } catch (error) {
+        console.error("Update failed", error);
     }
 };
 
