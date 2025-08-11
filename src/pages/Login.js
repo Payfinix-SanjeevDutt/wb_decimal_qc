@@ -31,7 +31,9 @@ const Login = () => {
     setError("");
     try {
       const res = await axios.post("/qclogin", { email, password });
-      if (res.status === 200 && res.data.access_token) {
+      console.log(res);
+      if (res.data.status === "success" && res.data.access_token) {
+        console.log(res);
         saveToken(res.data.access_token);
         navigate("/dashboard");
       } else {
@@ -117,7 +119,7 @@ const Login = () => {
               color: "#fff",
               textTransform: "none",
               borderRadius: 2,
-              mt:3
+              mt: 3,
             }}
           >
             Sign in
