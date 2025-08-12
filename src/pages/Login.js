@@ -32,7 +32,7 @@ const Login = () => {
     try {
       const res = await axios.post("/qclogin", { email, password });
       console.log(res);
-      if (res.data.status === "success" && res.data.access_token) {
+      if (res.data.access_token) {
         console.log(res);
         saveToken(res.data.access_token);
         navigate("/dashboard");

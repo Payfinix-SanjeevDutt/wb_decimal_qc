@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL: process.env.REACT_APP_API || 'http://localhost:8000', // fallback for local dev
+  baseURL: process.env.REACT_APP_API || 'http://localhost:8000', // fallback for local dev
   // baseURL: "http://127.0.0.1:5000",
-  baseURL: "https://wb-image.onrender.com",
+  // baseURL: "http://127.0.0.1:5000",
+  // baseURL: "https://wb-image.onrender.com",
 });
 
 api.interceptors.request.use(
