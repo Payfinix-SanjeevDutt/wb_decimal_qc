@@ -10,8 +10,24 @@ const Dashboard = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const handleCardUpdate = (id) => {
-        setRecords((prev) => prev.filter((rec) => rec.id !== id));
+    // const handleCardUpdate = (id) => {
+    //     setRecords((prev) => prev.filter((rec) => rec.id !== id));
+    // };
+
+    const handleCardUpdate = (id, type) => {
+        if (type === "decimal") {
+            // Remove the card after Yes/No update
+            setRecords((prev) => prev.filter((rec) => rec.id !== id));
+        } else if (type === "ghost") {
+            // Just update the meter_ghost value in place
+            setRecords((prev) =>
+                prev.map((rec) =>
+                    rec.id === id
+                        ? { ...rec, meter_ghost: !rec.meter_ghost }
+                        : rec
+                )
+            );
+        }
     };
 
     const fetchData = async (currentPage) => {
@@ -54,11 +70,6 @@ const Dashboard = () => {
             <Grid container spacing={2}>
                 {records.map((record) => (
                     <Grid item xs={12} sm={6} md={4} key={record.id}>
-                        {/* <MeterCard
-                            record={record}
-                            onClick={() => setSelected(record)}
-                            onUpdate={() => fetchData(page)}
-                        /> */}
                         <MeterCard
                             record={record}
                             onClick={() => setSelected(record)}

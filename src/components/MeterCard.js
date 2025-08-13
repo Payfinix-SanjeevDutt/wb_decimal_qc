@@ -15,74 +15,51 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
     const [showReadingInput, setShowReadingInput] = useState(false);
     const [readingValue, setReadingValue] = useState("");
 
-const handleDecimalUpdate = async (value, e) => {
-    e.stopPropagation();
+    const handleGhostUpdate = async (e) => {
+        e.stopPropagation();
 
-    if (value) {
-        setShowReadingInput(true);
-    } else {
+        try {
+            await axios.patch(`/reading-ds/${record.id}/ghost`, {
+                meter_ghost: true,
+            });
+            // if (onUpdate) onUpdate(record.id);
+            if (onUpdate) onUpdate(record.id, "ghost");
+        } catch (error) {
+            console.error("Ghost update failed", error);
+        }
+    };
+
+    const handleDecimalUpdate = async (value, e) => {
+        e.stopPropagation();
+
+        if (value) {
+            setShowReadingInput(true);
+        } else {
+            try {
+                await axios.patch(`/reading-ds/${record.id}/decimal`, {
+                    meter_has_decimal: false,
+                });
+                // if (onUpdate) onUpdate(record.id);
+                if (onUpdate) onUpdate(record.id, "decimal");
+            } catch (error) {
+                console.error("Update failed", error);
+            }
+        }
+    };
+
+    const submitReading = async () => {
+        if (!readingValue) return;
+
         try {
             await axios.patch(`/reading-ds/${record.id}/decimal`, {
-                meter_has_decimal: false,
+                meter_has_decimal: true,
+                prev_reading: readingValue,
             });
             if (onUpdate) onUpdate(record.id); // Pass ID to parent
         } catch (error) {
             console.error("Update failed", error);
         }
-    }
-};
-
-const submitReading = async () => {
-    if (!readingValue) return;
-
-    try {
-        await axios.patch(`/reading-ds/${record.id}/decimal`, {
-            meter_has_decimal: true,
-            prev_reading: readingValue,
-        });
-        if (onUpdate) onUpdate(record.id); // Pass ID to parent
-    } catch (error) {
-        console.error("Update failed", error);
-    }
-};
-
-    // const handleDecimalUpdate = async (value, e) => {
-    //     e.stopPropagation();
-
-    //     if (value) {
-    //         setShowReadingInput(true);
-    //     } else {
-    //         try {
-    //             await axios.patch(`/reading-ds/${record.id}/decimal`, {
-    //                 meter_has_decimal: false,
-    //             });
-    //             if (onUpdate) onUpdate(); // Refresh the card list
-    //         } catch (error) {
-    //             console.error("Update failed", error);
-    //             // Optional: show error UI or snackbar instead of alert
-    //         }
-    //     }
-    // };
-
-    // const submitReading = async () => {
-    //     if (!readingValue) {
-    //         // Optional: Show a toast/snackbar instead of alert
-    //         return;
-    //     }
-
-    //     try {
-    //         await axios.patch(`/reading-ds/${record.id}/decimal`, {
-    //             meter_has_decimal: true,
-    //             prev_reading: readingValue,
-    //         });
-    //         if (onUpdate) onUpdate(); // Refresh after successful update
-    //     } catch (error) {
-    //         console.error("Update failed", error);
-    //         // Optional: show error UI or snackbar instead of alert
-    //     }
-    // };
-
-    
+    };
 
     return (
         <Card
@@ -121,6 +98,15 @@ const submitReading = async () => {
                         spacing={2}
                         mt={1}
                     >
+                        <Button
+                            variant="contained"
+                            color="warning"
+                            size="small"
+                            onClick={(e) => handleGhostUpdate(e)}
+                        >
+                            Ghost
+                        </Button>
+
                         <Button
                             variant="contained"
                             color="success"
