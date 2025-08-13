@@ -15,7 +15,6 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
     const [showReadingInput, setShowReadingInput] = useState(false);
     const [readingValue, setReadingValue] = useState("");
 
-<<<<<<< HEAD
     const handleGhostUpdate = async (e) => {
         e.stopPropagation();
 
@@ -61,89 +60,6 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
             console.error("Update failed", error);
         }
     };
-=======
-// const handleDecimalUpdate = async (value, e) => {
-//     e.stopPropagation();
-
-//     if (value) {
-//         setShowReadingInput(true);
-//     } else {
-//         try {
-//             await axios.patch(`/reading-ds/${record.id}/decimal`, {
-//                 meter_has_decimal: false,
-//             });
-//             if (onUpdate) onUpdate(record.id); // Pass ID to parent
-//         } catch (error) {
-//             console.error("Update failed", error);
-//         }
-//     }
-// };
-
-const handleDecimalUpdate = async (value, e) => {
-    e.stopPropagation();
-
-    try {
-        await axios.patch(`/reading-ds/${record.id}/decimal`, {
-            meter_has_decimal: value,
-        });
-        if (onUpdate) onUpdate(record.id); // Notify parent
-    } catch (error) {
-        console.error("Update failed", error);
-    }
-};
-
-const submitReading = async () => {
-    if (!readingValue) return;
-
-    try {
-        await axios.patch(`/reading-ds/${record.id}/decimal`, {
-            meter_has_decimal: true,
-            prev_reading: readingValue,
-        });
-        if (onUpdate) onUpdate(record.id); // Pass ID to parent
-    } catch (error) {
-        console.error("Update failed", error);
-    }
-};
-
-    // const handleDecimalUpdate = async (value, e) => {
-    //     e.stopPropagation();
-
-    //     if (value) {
-    //         setShowReadingInput(true);
-    //     } else {
-    //         try {
-    //             await axios.patch(`/reading-ds/${record.id}/decimal`, {
-    //                 meter_has_decimal: false,
-    //             });
-    //             if (onUpdate) onUpdate(); // Refresh the card list
-    //         } catch (error) {
-    //             console.error("Update failed", error);
-    //             // Optional: show error UI or snackbar instead of alert
-    //         }
-    //     }
-    // };
-
-    // const submitReading = async () => {
-    //     if (!readingValue) {
-    //         // Optional: Show a toast/snackbar instead of alert
-    //         return;
-    //     }
-
-    //     try {
-    //         await axios.patch(`/reading-ds/${record.id}/decimal`, {
-    //             meter_has_decimal: true,
-    //             prev_reading: readingValue,
-    //         });
-    //         if (onUpdate) onUpdate(); // Refresh after successful update
-    //     } catch (error) {
-    //         console.error("Update failed", error);
-    //         // Optional: show error UI or snackbar instead of alert
-    //     }
-    // };
-
-    
->>>>>>> edbe7d852511e24eb1d84287c4832dccf846fd6c
 
     return (
         <Card
