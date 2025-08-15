@@ -66,7 +66,7 @@ const Dashboard = () => {
                     letterSpacing: 0.5,
                 }}
             >
-                Powerhouse Image Records
+                QC Image Records
             </Typography>
 
             <Grid container spacing={2}>
