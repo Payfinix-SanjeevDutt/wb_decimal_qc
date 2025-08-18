@@ -78,7 +78,7 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
                         spacing={2}
                         mt={1}
                     >
-                        <Button
+                        {/* <Button
                             variant="contained"
                             color="warning"
                             size="small"
@@ -86,7 +86,7 @@ const MeterCard = ({ record, onClick, onUpdate }) => {
                             disabled={isGhost}
                         >
                             Ghost
-                        </Button>
+                        </Button> */}
 
                         <Button
                             variant="contained"
